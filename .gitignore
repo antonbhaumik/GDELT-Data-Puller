@@ -1,0 +1,6 @@
+.idea/
+.venv/
+output/
+*.csv
+*.json
+*.zip

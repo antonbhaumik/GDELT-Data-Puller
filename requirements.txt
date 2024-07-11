@@ -1,0 +1,4 @@
+googletrans==3.1.0a0 # 3.0.0 is broken (https://github.com/ssut/py-googletrans/issues/280)
+httpcore==0.9.1 # Bundled with googletrans, but my IDE complains if I don't explicitly state it. Ignore.
+pandas==2.2.2 # Latest version should probably work, this is what I used when developing.
+requests==2.32.3 # Same comment as pandas.
