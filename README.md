@@ -16,7 +16,7 @@ conda install googletrans=3.1.0a0 pandas requests # googletrans 3.0.0 is broken
 ```
 You may also be able to use your Linux distribution's package manager. 
 ### How do I use it?
-Run `python main.py` (or on some Linux distributions, `python3 main.py`) in a command line, or run it in your chosen text editor or IDE, e.g. [Python IDLE](https://docs.python.org/3/library/idle.html) (comes with Python on Windows/Mac), [Spyder](https://www.spyder-ide.org/), [VSCode](https://code.visualstudio.com/), or [PyCharm](https://www.jetbrains.com/pycharm/).  
+Run `python main.py` (or on some Linux distributions, `python3 main.py`) in a command line, or run it in your chosen text editor or IDE, e.g. [Python IDLE](https://docs.python.org/3/library/idle.html) (comes with Python on Windows/Mac), [Spyder](https://www.spyder-ide.org/), [VSCode](https://code.visualstudio.com/) (with the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)), or [PyCharm](https://www.jetbrains.com/pycharm/).  
 
 You will then get some prompts - fill them in and wait for a message saying the code has finished running. Read the [GDELT documentation](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) to know what the custom options do. This program may sometimes not work - in those cases, look at the comments in the code for suggestions for fixes.
 ### What can I do with the code?
