@@ -56,7 +56,8 @@ def pull_mode(current_mode):
     print(f"Pulling data for: {current_mode}")
     current_url = (base_url + f'{'&EndDateTime=' + enddatetime if enddatetime != '' else ''}'
                               f'&mode={current_mode}{'&sort=DateDesc' if 'Tone' not in current_mode else ''}')
-    df = pd.read_csv(io.StringIO(requests.get(current_url + '&format=csv').content.decode('utf-8')))
+    df = pd.read_csv(io.StringIO(requests.get(current_url + '&format=csv').content.decode('utf-8')),
+                     on_bad_lines='skip')
     df.to_csv(f'output/{current_mode}.csv', sep=',', encoding='utf-8', index=False)
 
 
@@ -260,20 +261,15 @@ while not enddatetime or startdatetime < enddatetime:
 
     try:
         x = requests.get(url + '&format=csv').content.decode('utf-8')
-        translation_df = pd.read_csv(io.StringIO(x))
-    except pandas.errors.EmptyDataError:
-        enddatetime = push_time_back(enddatetime, 2160)
-    else:
+        translation_df = pd.read_csv(io.StringIO(x), on_bad_lines='skip')
         complete_df = pd.concat([artlist_df, translation_df], ignore_index=True)
-
-        try:  # This is originally in the format 'xxx    yyyy-mm-dd hh:mm:ss', where 'xxx' is the line number.
-            enddatetime = min(str(complete_df.tail(1)["Date"]).split("\n")[0][-19:].replace("-", "")
-                              .replace(":", "").replace(" ", ""), enddatetime)
-        except KeyError:
-            enddatetime = push_time_back(enddatetime, 2160)
-        else:
-            artlist_df = complete_df.drop_duplicates(keep='first')
-            artlist_df.to_csv(f'output/ArtList.csv', sep=',', encoding='utf-8', index=False)
+        # This is originally in the format 'xxx    yyyy-mm-dd hh:mm:ss', where 'xxx' is the line number.
+        enddatetime = min(str(complete_df.tail(1)["Date"]).split("\n")[0][-19:].replace("-", "")
+                          .replace(":", "").replace(" ", ""), enddatetime)
+        artlist_df = complete_df.drop_duplicates(keep='first')
+        artlist_df.to_csv(f'output/ArtList.csv', sep=',', encoding='utf-8', index=False)
+    except pandas.errors.EmptyDataError | KeyError:
+        enddatetime = push_time_back(enddatetime, 2160)
 
     if should_sleep:
         time.sleep(5)
@@ -297,7 +293,7 @@ if translation:
         print(f'Translating titles in {file}')
         translations = {}
         threads.clear()
-        translation_df = pd.read_csv(f'output/{file}.csv')
+        translation_df = pd.read_csv(f'output/{file}.csv', on_bad_lines='skip')
         for col in translation_df.columns:
             if 'Title' in col:
                 for index, value in translation_df[col].items():
@@ -323,7 +319,7 @@ if translation:
 # code also removes whitespace to treat the same headline with whitespace differences as the same.
 for file in ('ArtList', 'ArtListTranslated'):
     if os.path.exists(f'output/{file}.csv'):
-        original_df = pd.read_csv(f'output/{file}.csv')
+        original_df = pd.read_csv(f'output/{file}.csv', on_bad_lines='skip')
         original_df['Normalised'] = original_df['Title'].str.split('|').str[0].str.split('(').str[0].str.strip()
         original_df = original_df.drop_duplicates(subset='Normalised', keep='first').drop(columns='Normalised')
         original_df.to_csv(f'output/{file}NoDuplicates.csv', index=False)
