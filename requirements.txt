@@ -1,4 +1,8 @@
 googletrans==3.1.0a0 # 3.0.0 is broken (https://github.com/ssut/py-googletrans/issues/280)
-httpcore==0.9.1 # Bundled with googletrans, but my IDE complains if I don't explicitly state it. Ignore.
-pandas==2.2.2 # Latest version should probably work, this is what I used when developing.
-requests==2.32.3 # Same comment as pandas.
+httpcore==0.9.1
+lxml_html_clean==0.1.1
+matplotlib==3.9.1
+newspaper3k==0.2.8
+nltk==3.8.1
+pandas==2.2.2
+requests==2.32.3

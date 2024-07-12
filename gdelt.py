@@ -135,7 +135,7 @@ else:
     # Gets information to be passed into the GDELT API, leaving these blank leads to default options being used.
     # Some IDEs show a warning below because of the unsecure link - unfortunately, there are no other sources that I
     # could find for this list of themes.
-    keywords = (input('Please enter keywords/phrases, separated by commas (comparisons use OR).\n> ')
+    keywords = (input('Please enter keywords/phrases, separated by commas.\n> ')
                 .replace(', ', ',').split(','))
     keyword_format = ''
     if len(keywords) > 1:
@@ -183,7 +183,7 @@ if len(keywords) > 1:
     else:
         print(f'The keyword format entered, {keyword_format}, is invalid. Only using first keyword: {keywords[0]}.')
 
-# Here, we empty the output/folder if it already exists, creates it if it doesn't
+# Here, we empty the output/ folder if it already exists, creates it if it doesn't
 if os.path.exists('output/'):
     shutil.rmtree('output/')
 os.makedirs("output/")
@@ -279,7 +279,7 @@ while not enddatetime or startdatetime < enddatetime:
                           .replace(":", "").replace(" ", ""), enddatetime)
         artlist_df = complete_df.drop_duplicates(keep='first')
         artlist_df.to_csv(f'output/ArtList.csv', sep=',', encoding='utf-8', index=False)
-    except pandas.errors.EmptyDataError | KeyError:
+    except (pandas.errors.EmptyDataError, KeyError):
         enddatetime = push_time_back(enddatetime, 2160)
 
     if should_sleep:

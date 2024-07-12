@@ -1,6 +1,9 @@
 .idea/
 .venv/
+analysis/
 output/
 *.csv
 *.json
+*.png
 *.zip
+urls.txt
