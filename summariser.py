@@ -23,5 +23,6 @@ for url in urls:
     except newspaper.article.ArticleException:
         print('Error fetching, parsing, or summarising article.')
         continue
-    print(article.summary)
+    # print(article.text)  # Print the full text
+    print(article.summary)  # Print a summary from nltk
     print()
