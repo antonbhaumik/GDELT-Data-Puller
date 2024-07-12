@@ -4,5 +4,6 @@ lxml_html_clean==0.1.1
 matplotlib==3.9.1
 newspaper3k==0.2.8
 nltk==3.8.1
+numpy==1.26.4
 pandas==2.2.2
 requests==2.32.3
