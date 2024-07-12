@@ -121,21 +121,26 @@ if os.path.exists('output/input.json'):
 
 if previous_input:
     # If the previous input data exists, and the user wants to use it, set variables accordingly and skip inputs
-    keywords = previous_input.get('Keywords')
-    lang = previous_input.get('Language')
-    country = previous_input.get('Country')
-    domain = previous_input.get('Domain')
-    theme = previous_input.get('Theme')
-    custom_parameters = previous_input.get('Custom')
-    startdatetime = previous_input.get('Start')
-    enddatetime = previous_input.get('End')
-    translation = previous_input.get('Translation')
+    keywords = previous_input.get('Keywords', '')
+    keyword_format = previous_input.get('Keyword Format', '')
+    lang = previous_input.get('Language', '')
+    country = previous_input.get('Country', '')
+    domain = previous_input.get('Domain', '')
+    theme = previous_input.get('Theme', '')
+    custom_parameters = previous_input.get('Custom', '')
+    startdatetime = previous_input.get('Start', '')
+    enddatetime = previous_input.get('End', '')
+    translation = previous_input.get('Translation', '')
 else:
     # Gets information to be passed into the GDELT API, leaving these blank leads to default options being used.
     # Some IDEs show a warning below because of the unsecure link - unfortunately, there are no other sources that I
     # could find for this list of themes.
     keywords = (input('Please enter keywords/phrases, separated by commas (comparisons use OR).\n> ')
                 .replace(', ', ',').split(','))
+    keyword_format = ''
+    if len(keywords) > 1:
+        keyword_format = input('You entered multiple keywords/phrases. Which format would you like to use: "AND" or '
+                               '"OR".\n> ').upper()
     lang = input('Please enter a language or leave blank to include all languages.\n> ')
     country = input('Please enter a country or leave blank to include all countries.\n> ')
     domain = input('Please enter a domain name to search for or leave blank to include all domain names.\n> ')
@@ -171,7 +176,12 @@ should_sleep = input('To disable 5 second waiting times (which prevent rate limi
 # Phrases need to be in "quotation marks", otherwise the words are treated as separate.
 keystring = f'{f'"{keywords[0]}"' if keywords[0] else ''}'
 if len(keywords) > 1:
-    keystring = f'("{'" OR "'.join(keywords)}")'.replace('"', "%22").replace(" ", "%20")
+    if keyword_format == 'OR':
+        keystring = f'("{'" OR "'.join(keywords)}")'.replace('"', "%22").replace(" ", "%20")
+    elif keyword_format == 'AND':
+        keystring = f'"{'" "'.join(keywords)}"'.replace(' ', '%20').replace('"', '%22')
+    else:
+        print(f'The keyword format entered, {keyword_format}, is invalid. Only using first keyword: {keywords[0]}.')
 
 # Here, we empty the output/folder if it already exists, creates it if it doesn't
 if os.path.exists('output/'):
@@ -181,6 +191,7 @@ os.makedirs("output/")
 # Here, we put the parameters above into a file, to allow for importing later
 inp = {
     'Keywords': keywords,
+    'Keyword Format': keyword_format,
     'Language': lang,
     'Country': country,
     'Domain': domain,
