@@ -53,7 +53,7 @@ def pull_mode(current_mode):
     :param current_mode: The mode to query.
     :return: Nothing - a csv file is created
     """
-    print(f"Pulling data for: {current_mode}")
+    print(f'Pulling data for: {current_mode}')
     current_url = (base_url + f'{'&EndDateTime=' + enddatetime if enddatetime != '' else ''}'
                               f'&mode={current_mode}{'&sort=DateDesc' if 'Tone' not in current_mode else ''}')
     df = pd.read_csv(io.StringIO(requests.get(current_url + '&format=csv').content.decode('utf-8')),
@@ -186,7 +186,7 @@ if len(keywords) > 1:
 # Here, we empty the output/ folder if it already exists, creates it if it doesn't
 if os.path.exists('output/'):
     shutil.rmtree('output/')
-os.makedirs("output/")
+os.makedirs('output/')
 
 # Here, we put the parameters above into a file, to allow for importing later
 inp = {
@@ -275,8 +275,8 @@ while not enddatetime or startdatetime < enddatetime:
         translation_df = pd.read_csv(io.StringIO(x), on_bad_lines='skip')
         complete_df = pd.concat([artlist_df, translation_df], ignore_index=True)
         # This is originally in the format 'xxx    yyyy-mm-dd hh:mm:ss', where 'xxx' is the line number.
-        enddatetime = min(str(complete_df.tail(1)["Date"]).split("\n")[0][-19:].replace("-", "")
-                          .replace(":", "").replace(" ", ""), enddatetime)
+        enddatetime = min(str(complete_df.tail(1)['Date']).split('\n')[0][-19:].replace('-', '')
+                          .replace(':', '').replace(' ', ''), enddatetime)
         artlist_df = complete_df.drop_duplicates(keep='first')
         artlist_df.to_csv(f'output/ArtList.csv', sep=',', encoding='utf-8', index=False)
     except (pandas.errors.EmptyDataError, KeyError):
@@ -308,7 +308,7 @@ if translation:
         for col in translation_df.columns:
             if 'Title' in col:
                 for index, value in translation_df[col].items():
-                    if str(value) != "nan":
+                    if str(value) != 'nan':
                         threads.append(threading.Thread(target=translate, args=(index, col, value)))
         active_threads = []
         for thread in threads:

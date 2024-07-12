@@ -41,7 +41,7 @@ volume = True
 # Here, we empty the analysis/ folder if it already exists, creates it if it doesn't
 if os.path.exists('analysis/'):
     shutil.rmtree('analysis/')
-os.makedirs("analysis/")
+os.makedirs('analysis/')
 
 # Read the data and clean it
 df = pd.read_csv(f'{folder}/TimelineVolRaw.csv', on_bad_lines='skip')
